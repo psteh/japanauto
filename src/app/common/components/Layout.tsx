@@ -15,7 +15,7 @@ const Layout: FC<ILayout> = ({ children }) => {
         hashed: false,
       }}
     >
-      <StyledContainer className="px-48 py-32">{children}</StyledContainer>
+      <StyledContainer className="px-32 py-24">{children}</StyledContainer>
     </ConfigProvider>
   );
 };

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import AxiosClient from '@/app/utils/AxiosClient';
 
-export const login = async () => {
-  return await axios.post('/auth/token', {
+export const login = async (apiUrl: string) => {
+  return await axios.post(`${apiUrl}/auth/token`, {
     email: process.env.NEXT_PUBLIC_VISITOR_EMAIL || '',
     password: process.env.NEXT_PUBLIC_VISITOR_PASSWORD || '',
   });

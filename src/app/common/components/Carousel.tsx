@@ -13,6 +13,8 @@ interface IImageCarousel {
 }
 
 const StyledCarousel = styled(Carousel)`
+  min-height: 260px;
+
   // remove default arrow
   .slick-next {
     &::before {
@@ -43,15 +45,18 @@ const ImageCarousel: FC<IImageCarousel> = ({ images, width, alt }) => {
 
   const arrowStyle = {
     color: '#fff',
-    fontSize: '24px',
+    fontSize: '16px',
     lineHeight: 1.5715,
     borderRadius: 100,
     backgroundColor: '#df3d1a',
-    width: '24px',
-    height: '24px',
+    width: '20px',
+    height: '20px',
     display: 'flex',
+    justifyContent: 'center',
+    alignItem: 'center',
     padding: '4px',
     position: 'absolute',
+    transform: 'translate(0, 50%)',
   };
 
   const NextArrow = (props: CustomArrowProps) => {

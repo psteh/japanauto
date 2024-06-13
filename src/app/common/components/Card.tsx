@@ -70,14 +70,14 @@ const CardComponent: FC<ICard> = ({ data }) => {
 
   return (
     <Col span={6} className="">
-      <Link href={`/auction/${providerId}`}>
-        <StyledCard hoverable cover={renderImageCarousel}>
+      <StyledCard hoverable cover={renderImageCarousel}>
+        <Link href={`/auction/${providerId}`}>
           <Meta
             title={`${brandName} ${modelName}`}
             description={renderDescription}
           />
-        </StyledCard>
-      </Link>
+        </Link>
+      </StyledCard>
     </Col>
   );
 };

@@ -1,60 +1,37 @@
-'use client';
-
-import React, { useEffect, useCallback, useState, Suspense } from 'react';
-import { ConfigProvider, notification } from 'antd';
+import React, { Suspense } from 'react';
+import { headers } from 'next/headers';
 
 import { login } from '@/modules/Auction/api';
 import PageContainer from '@/modules/Auction/containers/PageContainer';
-import useToken from '@/app/hooks/useToken';
 
-export default function Home() {
-  const { token, setToken } = useToken();
+async function getData() {
+  try {
+    const referer = headers().get('referer');
+    const xForwardedProto = headers().get('x-forwarded-proto');
+    const host = headers().get('host');
+    const apiUrl = referer || `${xForwardedProto}://${host}/`;
 
-  // const [authorized, setAuthorized] = useState<boolean>(false);
-
-  const handleLogin = useCallback(async () => {
-    if (!token) {
-      try {
-        const res = await login();
-        setToken(res?.data?.token);
-
-        return res?.data?.token;
-      } catch (error) {
-        console.log(error);
-        notification.error({
-          message: 'Oops! Looks like something went wrong.',
-          description: 'Please try again.',
-        });
-      }
+    if (!apiUrl || apiUrl.includes('null')) {
+      throw new Error('Unable to find referer in headers');
     }
-  }, [token, setToken]);
 
-  const initialize = useCallback(async () => {
-    await handleLogin();
-  }, [handleLogin]);
+    const res = await login(apiUrl);
 
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
+    return res?.data?.token;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
 
-  // useEffect(() => {
-  //   if (!authorized) {
-  //     const password = window.prompt('Password');
-  //     setAuthorized(password === process.env.NEXT_PUBLIC_VISITOR_PASSWORD);
-  //   }
-  // }, [authorized]);
-
-  // if (!authorized) {
-  //   return <>You have no access to the page</>;
-  // }
+export default async function Page() {
+  const token = await getData();
 
   return (
-    <ConfigProvider theme={{ hashed: false }}>
-      <main className=" pt-36 pb-16">
-        <Suspense>
-          <PageContainer token={token} />
-        </Suspense>
-      </main>
-    </ConfigProvider>
+    <main>
+      <Suspense>
+        <PageContainer token={token} />
+      </Suspense>
+    </main>
   );
 }

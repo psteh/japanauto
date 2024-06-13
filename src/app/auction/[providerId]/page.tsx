@@ -51,8 +51,6 @@ export default function AuctionLot({
       const res = await getLotDataByProviderId(providerId);
       // const photosRes = await getProviderPhotos(providerId);
 
-      console.log(res.data);
-
       setLotData(res.data);
     } catch (error) {
       console.log(error);

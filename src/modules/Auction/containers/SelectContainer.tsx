@@ -13,7 +13,6 @@ interface ISelectContainer {
 }
 
 const StyledSelect = styled(Select)`
-  width: 100%;
   width: 250px;
 `;
 

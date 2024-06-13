@@ -3,16 +3,10 @@
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 interface IUseParamRouterReturn {
-  [key: string]:
-    | string
-    | number
-    | ((params: { [key: string]: string | number }) => void);
+  [key: string | number]: any;
   page: number;
   search: string;
   sort: string;
-  brandName: string;
-  modelName: string;
-  providerId: string;
   set: (params: { [key: string]: string | number }) => void;
 }
 
@@ -25,11 +19,14 @@ const useParamRouter = (): IUseParamRouterReturn => {
   const page = Number(searchParams.get('page')) || 1;
   const search = searchParams.get('search') || '';
   const sort = searchParams.get('sort') || '';
-  const brandName = searchParams.get('brandName') || '';
-  const modelName = searchParams.get('modelName') || '';
-  const providerId = searchParams.get('providerId') || '';
+  let queryParams: { [key: string]: string | null } = {};
 
-  const set = (params: { [key: string]: string | number }) => {
+  // get additional query params
+  Array.from(searchParams.keys()).forEach((key) => {
+    return (queryParams[key] = searchParams.get(key));
+  });
+
+  const set = (params: { [key: string]: string | number }): void => {
     Object.entries(params).forEach(([key, value]) => {
       urlSearchParams.set(key, String(value));
     });
@@ -41,12 +38,10 @@ const useParamRouter = (): IUseParamRouterReturn => {
   };
 
   return {
+    ...queryParams,
     page,
     search,
     sort,
-    brandName,
-    modelName,
-    providerId,
     set,
   };
 };

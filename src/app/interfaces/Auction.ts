@@ -29,3 +29,12 @@ export interface IAuction {
   info: string;
   watchlist: boolean;
 }
+
+export interface IAuctionFilters {
+  auctionDates?: string[] | undefined;
+  engineSizeCc?: number[] | undefined;
+  exteriorColorNames?: string[] | undefined;
+  providerMileage?: number[] | undefined;
+  transmissionTypes?: string[] | undefined;
+  yearOfProduction?: number[] | undefined;
+}
