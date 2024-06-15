@@ -2,6 +2,8 @@ import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 import { ConfigProvider } from 'antd';
 
+import WhatsappContact from '@/modules/Auction/components/WhatsappContact';
+
 interface ILayout {
   children: ReactNode;
 }
@@ -18,6 +20,7 @@ const Layout: FC<ILayout> = ({ children }) => {
       }}
     >
       <StyledContainer className="px-32 py-24">{children}</StyledContainer>
+      <WhatsappContact />
     </ConfigProvider>
   );
 };
