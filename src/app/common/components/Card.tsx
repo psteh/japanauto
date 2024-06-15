@@ -1,12 +1,18 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Card, Col } from 'antd';
+import { Card, Col, Typography } from 'antd';
 import Link from 'next/link';
+import {
+  CalendarOutlined,
+  DashboardOutlined,
+  HomeOutlined,
+} from '@ant-design/icons';
 
 import Carousel from '@/app/common/components/Carousel';
 
 import { IAuction } from '@/app/interfaces/Auction';
 
+const { Paragraph, Text } = Typography;
 const { Meta } = Card;
 
 interface ICard {
@@ -19,7 +25,8 @@ const StyledCard = styled(Card)`
 `;
 
 const StyledCarouselContainer = styled.div`
-  min-height: 260px;
+  width: 260px;
+  max-height: 260px;
 `;
 
 const StyledCarousel = styled(Carousel)`
@@ -54,6 +61,7 @@ const CardComponent: FC<ICard> = ({ data }) => {
       <StyledCarousel
         images={auctionImages}
         width="100%"
+        maxHeight="260px"
         alt={`${brandName} ${modelName}`}
       />
     </StyledCarouselContainer>
@@ -61,10 +69,15 @@ const CardComponent: FC<ICard> = ({ data }) => {
 
   const renderDescription = (
     <div>
-      <div>Mileage: {providerMileage}</div>
-      <div>Manufacture Year: {yearOfProduction}</div>
-      <div>Auction Date: {auctionDate}</div>
-      <div>Auction Name: {auctionName}</div>
+      <div>
+        <DashboardOutlined /> {providerMileage}
+      </div>
+      <div>
+        <CalendarOutlined /> {auctionDate}
+      </div>
+      <div>
+        <HomeOutlined /> {auctionName}
+      </div>
     </div>
   );
 
@@ -73,7 +86,15 @@ const CardComponent: FC<ICard> = ({ data }) => {
       <StyledCard hoverable cover={renderImageCarousel}>
         <Link href={`/auction/${providerId}`}>
           <Meta
-            title={`${brandName} ${modelName}`}
+            title={
+              <Paragraph
+                copyable={{
+                  text: `${window.location.origin}/auction/${providerId}`,
+                }}
+              >
+                {`${yearOfProduction} ${brandName} ${modelName}`}
+              </Paragraph>
+            }
             description={renderDescription}
           />
         </Link>

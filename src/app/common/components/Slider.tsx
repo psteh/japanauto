@@ -14,14 +14,16 @@ const StyledContainer = styled.div``;
 
 const SliderComponent: FC<ISlider> = ({ marks, defaultValue, onChange }) => {
   return (
-    <Slider
-      range
-      marks={marks}
-      defaultValue={defaultValue}
-      min={defaultValue?.[0]}
-      max={defaultValue?.[1]}
-      onChange={onChange}
-    />
+    <StyledContainer className="px-2">
+      <Slider
+        range
+        marks={marks}
+        defaultValue={defaultValue}
+        min={defaultValue?.[0]}
+        max={defaultValue?.[1]}
+        onChange={onChange}
+      />
+    </StyledContainer>
   );
 };
 

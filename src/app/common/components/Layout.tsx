@@ -6,7 +6,9 @@ interface ILayout {
   children: ReactNode;
 }
 
-const StyledContainer = styled.div``;
+const StyledContainer = styled.div`
+  background-color: #f4f6f6;
+`;
 
 const Layout: FC<ILayout> = ({ children }) => {
   return (

@@ -9,6 +9,9 @@ import { CustomArrowProps } from 'react-slick';
 interface IImageCarousel {
   images: Array<string>;
   width?: number | string;
+  height?: number | string;
+  maxWidth?: number | string;
+  maxHeight?: number | string;
   alt?: string;
 }
 
@@ -38,7 +41,22 @@ const StyledCarousel = styled(Carousel)`
   }
 `;
 
-const ImageCarousel: FC<IImageCarousel> = ({ images, width, alt }) => {
+const StyledImage = styled(Image)<{
+  maxWidth?: number | string;
+  maxHeight?: number | string;
+}>`
+  max-width: ${(props) => props.maxWidth};
+  max-height: ${(props) => props.maxHeight};
+`;
+
+const ImageCarousel: FC<IImageCarousel> = ({
+  images,
+  width,
+  height,
+  maxWidth,
+  maxHeight,
+  alt,
+}) => {
   if (!images || images.length === 0) {
     return null;
   }
@@ -106,9 +124,12 @@ const ImageCarousel: FC<IImageCarousel> = ({ images, width, alt }) => {
       prevArrow={<PrevArrow />}
     >
       {images.map((image) => (
-        <Image
+        <StyledImage
           key={image}
           width={width || 700}
+          height={height || '100%'}
+          maxWidth={maxWidth}
+          maxHeight={maxHeight}
           src={image}
           alt={alt || image}
         />

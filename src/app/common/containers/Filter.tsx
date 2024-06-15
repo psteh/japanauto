@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { Popover, Button } from 'antd';
 
@@ -38,6 +38,8 @@ const FilterContainer: FC<IFilterContainer> = ({
 }) => {
   const paramRouter = useParamRouter();
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   let component = null;
 
   const handleOnChange = (value?: any): void => {
@@ -68,9 +70,7 @@ const FilterContainer: FC<IFilterContainer> = ({
     return null;
   }
 
-  const FilterComponent = (
-    <StyledContainer className="p-2">{component}</StyledContainer>
-  );
+  const FilterComponent = <StyledContainer>{component}</StyledContainer>;
 
   return (
     <StyledPopover
@@ -78,6 +78,9 @@ const FilterContainer: FC<IFilterContainer> = ({
       content={FilterComponent}
       placement="bottom"
       className="mx-2"
+      trigger="click"
+      open={isOpen}
+      onOpenChange={setIsOpen}
     >
       <Button type="default">{title}</Button>
     </StyledPopover>
