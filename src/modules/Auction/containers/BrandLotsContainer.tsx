@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
 import { notification, Row, Spin } from 'antd';
 
+import dayjs from '@/app/common/libraries/dayjs';
 import useParamRouter from '@/app/hooks/useParamRouter';
 import { getBrandLotsByModel } from '@/modules/Auction/api';
 import Card from '@/app/common/components/Card';
@@ -10,10 +11,20 @@ import FilterContainer from '@/modules/Auction/containers/FilterContainer';
 interface IBrandLotsContainer {}
 
 const BrandLotsContainer: FC<IBrandLotsContainer> = () => {
-  const { brandName, modelName } = useParamRouter();
+  const {
+    brandName,
+    modelName,
+    auctionDate,
+    engineCapacity,
+    color,
+    mileage,
+    transmission,
+    manufactureYear,
+  } = useParamRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [brandLots, setBrandLots] = useState<Array<IAuction>>([]);
+  const [allBrandLots, setAllBrandLots] = useState<Array<IAuction>>([]);
   const [filters, setFilters] = useState<IAuctionFilters>();
 
   const fetchAllBrandLots = useCallback(async () => {
@@ -22,6 +33,7 @@ const BrandLotsContainer: FC<IBrandLotsContainer> = () => {
       const res = await getBrandLotsByModel(brandName, modelName);
 
       setBrandLots(res?.data?.data || []);
+      setAllBrandLots(res?.data?.data || []); // default fetched brand lots
       setFilters(res?.data?.filter || []);
     } catch (error) {
       console.log(error);
@@ -37,6 +49,73 @@ const BrandLotsContainer: FC<IBrandLotsContainer> = () => {
   useEffect(() => {
     fetchAllBrandLots();
   }, [brandName, modelName, fetchAllBrandLots]);
+
+  // on filters change
+  useEffect(() => {
+    const filteredBrandLots = allBrandLots.filter((data) => {
+      if (
+        !auctionDate &&
+        !color &&
+        !engineCapacity &&
+        !manufactureYear &&
+        !mileage &&
+        !transmission
+      ) {
+        return true;
+      }
+
+      const {
+        auctionDate: brandLotAuctionDate,
+        engineSizeCc,
+        exteriorColorName,
+        providerMileage,
+        transmissionType,
+        yearOfProduction,
+      } = data;
+
+      if (
+        auctionDate &&
+        (dayjs(auctionDate)
+          .startOf('day')
+          .isAfter(dayjs(brandLotAuctionDate)) ||
+          dayjs(auctionDate).endOf('day').isBefore(dayjs(brandLotAuctionDate)))
+      ) {
+        return false;
+      }
+
+      if (engineCapacity && engineCapacity !== engineSizeCc) {
+        return false;
+      }
+
+      if (color && color !== exteriorColorName) {
+        return false;
+      }
+
+      if (mileage && mileage !== providerMileage) {
+        return false;
+      }
+
+      if (transmission && transmission !== transmissionType) {
+        return false;
+      }
+
+      if (manufactureYear && manufactureYear !== yearOfProduction) {
+        return false;
+      }
+
+      return true;
+    });
+
+    setBrandLots(filteredBrandLots);
+  }, [
+    allBrandLots,
+    auctionDate,
+    color,
+    engineCapacity,
+    manufactureYear,
+    mileage,
+    transmission,
+  ]);
 
   if (isLoading) {
     return <Spin />;
